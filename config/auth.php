@@ -35,12 +35,47 @@ return [
     |
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
+   'guards' => [
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
     ],
+
+    'admin' => [
+        'driver' => 'session',
+        'provider' => 'admins',
+    ],
+
+    'teacher' => [
+        'driver' => 'session',
+        'provider' => 'teachers',
+    ],
+
+    'staff' => [
+        'driver' => 'session',
+        'provider' => 'staff',
+    ],
+
+    'pt' => [
+        'driver' => 'session',
+        'provider' => 'pts',
+    ],
+
+    'family' => [
+        'driver' => 'session',
+        'provider' => 'families',
+    ],
+
+    'student' => [
+        'driver' => 'session',
+        'provider' => 'students',
+    ],
+
+    'board' => [
+        'driver' => 'session',
+        'provider' => 'boards',
+    ],
+],
 
     /*
     |--------------------------------------------------------------------------
@@ -59,17 +94,53 @@ return [
     |
     */
 
-    'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
-        ],
+   'providers' => [
+    'users' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\User::class,
+    ],
+
+    'admins' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Admin::class,
+    ],
+
+    'teachers' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Teacher::class,
+    ],
+
+    'staff' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Staff::class,
+    ],
+
+    'pts' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Pt::class,
+    ],
+
+    'families' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Family::class,
+    ],
+
+    'students' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Student::class,
+    ],
+
+    'boards' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Board::class,
+    ],
+],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-    ],
+
 
     /*
     |--------------------------------------------------------------------------
