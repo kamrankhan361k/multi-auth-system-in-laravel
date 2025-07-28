@@ -32,4 +32,8 @@ class LoginController extends Controller
         $request->session()->invalidate();
         return redirect()->route('admin.login');
     }
+    public function sayhi()
+    {
+        return 'hi';
+    }
 }
