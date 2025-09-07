@@ -1,16 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Board\Auth;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
-     use AuthenticatesUsers;
-
-    protected $redirectTo = '/board/dashboard';
-
     public function __construct()
     {
         $this->middleware('guest:board')->except('logout');
@@ -18,18 +15,32 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return view('board.auth.login');
+        return view('board.auth.login'); // create this Blade view
     }
 
-    protected function guard()
+    public function login(Request $request)
     {
-        return Auth::guard('board');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::guard('board')->attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/board/dashboard');
+        }
+
+        return back()->withErrors([
+            'email' => 'Invalid credentials',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
     {
-        $this->guard()->logout();
+        Auth::guard('board')->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('board.login');
     }
 }

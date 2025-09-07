@@ -7,33 +7,41 @@ use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
-     use AuthenticatesUsers;
 
-    protected $redirectTo = '/admin/dashboard';
-
-    public function __construct()
+   public function __construct()
     {
         $this->middleware('guest:admin')->except('logout');
     }
 
     public function showLoginForm()
     {
-        return view('admin.auth.login');
+        return view('admin.auth.login'); // create this Blade view
     }
 
-    protected function guard()
+
+    public function login(Request $request)
     {
-        return Auth::guard('admin');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::guard('admin')->attempt($credentials, $request->filled('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended('/admin/dashadmin');
+        }
+
+        return back()->withErrors([
+            'email' => 'Invalid credentials',
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
     {
-        $this->guard()->logout();
+        Auth::guard('admin')->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('admin.login');
-    }
-    public function sayhi()
-    {
-        return 'hi';
     }
 }
